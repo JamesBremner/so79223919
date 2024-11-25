@@ -7,6 +7,8 @@
 #include <stdlib.h> /* srand, rand */
 #include <time.h>   /* time */
 #include <cmath>
+#include "cRunWatch.h"
+
 
 struct numb
 {
@@ -141,9 +143,40 @@ void solve()
     std::cout << "Minimum sum " << sum << "\n";
 }
 
+// performance test
+void performace()
+{
+    // start timing profiler
+    raven::set::cRunWatch::Start();
+    gen1(1000);
+    {
+        raven::set::cRunWatch aWatcher("N=1000");
+        solve();
+    }
+
+    gen1(10000);
+    {
+        raven::set::cRunWatch aWatcher("N=10000");
+        solve();
+    }
+
+    gen1(100000);
+    {
+        raven::set::cRunWatch aWatcher("N=100000");
+        solve();
+    }
+
+    // display timing profiler report
+    raven::set::cRunWatch::Report();
+}
+
+
 main()
 {
     gen1(5);
     solve();
+
+    performace();
+
     return 0;
 }
