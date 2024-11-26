@@ -23,29 +23,31 @@ struct numb
 
 struct op1
 {
-    static int reduction(const numb &n);
-    static void apply(numb &n);
+    static int reduction(int i);
+    static void apply(int i);
 };
 struct op2
 {
-    static int reduction(const numb &n);
-    static void apply(numb &n);
+    static int reduction(int i);
+    static void apply(int i);
 };
 
 std::vector<numb> theNumbers;
 int kop1, kop2;
 int theK;
 
-int op1::reduction(const numb &n)
+int op1::reduction(int i)
 {
+    numb& n = theNumbers[i];
     if (n.op1)
         return 0;
     if (kop1 <= 0)
         return 0;
     return n.value - ceil(n.value / 2);
 }
-void op1::apply(numb &n)
+void op1::apply(int i)
 {
+    numb& n = theNumbers[i];
     //std::cout << "op1 " << n.value << " -> ";
     if (n.op1)
         return;
@@ -56,8 +58,9 @@ void op1::apply(numb &n)
     kop1--;
     //std::cout << n.value << "\n";
 }
-int op2::reduction(const numb &n)
+int op2::reduction(int i)
 {
+    numb& n = theNumbers[i];
     if (n.op2)
         return 0;
     if (kop2 <= 0)
@@ -66,8 +69,9 @@ int op2::reduction(const numb &n)
         return 0;
     return theK;
 }
-void op2::apply(numb &n)
+void op2::apply(int i)
 {
+    numb& n = theNumbers[i];
     //std::cout << "op2 " << n.value << " -> ";
     if (n.op2)
         return;
@@ -78,7 +82,7 @@ void op2::apply(numb &n)
     n.value -= theK;
     n.op2 = true;
     kop2--;
-     //std::cout << n.value << "\n";
+ //    std::cout << n.value << "\n";
 }
 
 void gen1(int count)
@@ -108,22 +112,22 @@ void solve()
     {
         // find largest reduction possible with one operation
         int bestReduction = 0;
-        numb &bestNumber = theNumbers[0];
+        int bestIndex = 0;
         int bestOp = 0;
-        for (auto &n : theNumbers)
+        for (int i = 0; i < theNumbers.size(); i++)
         {
-            int r = op1::reduction(n);
+            int r = op1::reduction(i);
             if (r > bestReduction)
             {
                 bestReduction = r;
-                bestNumber = n;
+                bestIndex = i;
                 bestOp = 1;
             }
-            r = op2::reduction(n);
+            r = op2::reduction(i);
             if (r > bestReduction)
             {
                 bestReduction = r;
-                bestNumber = n;
+                bestIndex = i;
                 bestOp = 2;
             }
         }
@@ -135,20 +139,22 @@ void solve()
         switch (bestOp)
         {
         case 1:
-            op1::apply(bestNumber);
+            op1::apply(bestIndex);
             break;
         case 2:
-            op2::apply(bestNumber);
+            op2::apply(bestIndex);
             break;
         }
     }
 
     // calculate sum of numbers
     int sum = 0;
-    for (auto &n : theNumbers)
+    for (auto &n : theNumbers) {
+        std::cout << n.value << " ";
         sum += n.value;
+    }
 
-    std::cout << "Minimum sum " << sum << "\n";
+    std::cout << "\nMinimum sum " << sum << "\n";
 }
 
 // performance test
@@ -184,7 +190,7 @@ main()
     gen2();
     solve();
 
-    performane();
+    performance();
 
     return 0;
 }
