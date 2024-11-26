@@ -93,6 +93,14 @@ void gen1(int count)
     kop2 = count / 2;
 }
 
+void gen2()
+{
+    theNumbers = { 2,8,3,19,3 };
+    theK = 3;
+    kop1 = 1;
+    kop2 = 1;
+}
+
 void solve()
 {
     // keep looping until no more ops possible
@@ -144,7 +152,7 @@ void solve()
 }
 
 // performance test
-void performace()
+void performance()
 {
     // start timing profiler
     raven::set::cRunWatch::Start();
@@ -173,10 +181,10 @@ void performace()
 
 main()
 {
-    gen1(5);
+    gen2();
     solve();
 
-    performace();
+    performane();
 
     return 0;
 }
